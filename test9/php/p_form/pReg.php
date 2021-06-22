@@ -104,7 +104,7 @@ class pReg{
 
 			//振込処理
 
-			/*
+			
 			$chargeId = null;
 			if($_REQUEST[ 'regist' ] != "on"){
 				try {
@@ -148,7 +148,7 @@ class pReg{
 					exit;
 				}
 			}
-*/
+
 /*
 			if($_SESSION[ 'sankaFin' ] == 1){
 				//既に参加登録をしている為
