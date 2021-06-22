@@ -398,15 +398,17 @@ class method extends Auth{
 		$sql .= ") VALUES (";
 		$sql .= $value;
 		$sql .= ")";
-
-
 		$r = $this->db->prepare($sql);
-
+		$vals = "";
 		foreach($data as $key=>$val){
 		    $k = ":".$key;
-		    if(!$val) $val = "";
+		    if(strlen($val) < 1 ) $val = "";
 		    $r->bindValue($k,$val,PDO::PARAM_STR);
+			$vals .= ",'".$val."'";
 		}
+print $sql;
+print $vals;
+
 		$flg = $r->execute();
 
 		if($flg){

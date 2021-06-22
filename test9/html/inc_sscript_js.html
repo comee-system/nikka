@@ -34,6 +34,19 @@
                 {literal}
                 <script type="text/javascript">
                     $(function(){
+						$("#return").click(function(){
+							if($("#confform").length){
+								$("#confform").submit();
+								return false;
+							}
+						});
+						$("#regist").click(function(){
+							if($("#confform").length){
+								$("[name='regist']").val("on");
+								$("#confform").submit();
+								return false;
+							}
+						});
 						$("#syozokuOther").on("click",function(){
 							var _syozokuOther = $("#syozokuOther").prop("checked");
 							if(_syozokuOther){

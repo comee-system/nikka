@@ -35,10 +35,6 @@ class pReg{
 		$this->sankaformselect = $this->db->getSankaFormSelect(1);
 		$this->syozokuSankaformselect = $this->db->getSyozokuSankaFormSelect(1);
 
-		
-
-
-
 	}
 	public function index(){
 		global $manage;
@@ -70,16 +66,12 @@ class pReg{
 			foreach($ex as $k=>$v){
 				$sankaformselect[$v] =$v; 
 			}
-
-
 			$ex = [];
 			$ex = explode(",",$data[ 'syozokuSankaformselect' ]);
 			$syozokuSankaformex = [];
 			foreach($ex as $key=>$val){
 				$syozokuSankaformex[$val] = $val;
 			}
-
-
 			$html[ 'sankaformex' ] = $sankaformselect;
 			$html[ 'sanka' ] = $data;
 			$html[ 'syozokuSankaformex' ] = $syozokuSankaformex;
@@ -100,14 +92,70 @@ class pReg{
 				//確認画面表示
 				$html[ 'file' ] = "pConf";
 			}
+			$_SESSION[ 'joinall' ] = $_REQUEST[ 'all'];
 		}
+
 		//エラーチェック
-		if($_REQUEST[ 'regist' ] == "on"){
+		if($_REQUEST[ 'regist' ] == "on" || $_REQUEST[ 'stripeToken' ]){
+
+			require_once('./stripe/stripe-php-master/init.php');
+			// APIのシークレットキー
+			\Stripe\Stripe::setApiKey('sk_test_51J4hgvLofq6whqU5JadMYzeluluwb4l6gkMISQ8lwYELOuwejH8cIvJvvfnefH3nXewKO5tLSbVzs5r4TfYu597d00jMxCJyOX');
+
+			//振込処理
+
+			/*
+			$chargeId = null;
+			if($_REQUEST[ 'regist' ] != "on"){
+				try {
+					// (1) オーソリ（与信枠の確保）
+					$token = $_POST['stripeToken'];
+					if($_SESSION[ 'joinall' ] > 0 ){
+						$charge = \Stripe\Charge::create(array(
+							'amount' => $_SESSION[ 'joinall' ] ,
+							'currency' => 'jpy',
+							'description' => 'test',
+							'source' => $token,
+							'capture' => false,
+						));
+						$chargeId = $charge['id'];
+
+						// (2) 注文データベースの更新などStripeとは関係ない処理
+						// :
+						// :
+						// :
+					}
+
+
+					if($chargeId){
+						// (3) 売上の確定
+						$charge->capture();
+					}
+					// 購入完了画面にリダイレクト
+				//	header("Location: /stripe/complete.html");
+				//	exit;
+				} catch(Exception $e) {
+					if ($chargeId !== null) {
+						// 例外が発生すればオーソリを取り消す
+						\Stripe\Refund::create(array(
+							'charge' => $chargeId,
+						));
+					}
+
+					// エラー画面にリダイレクト
+					//header("Location: /stripe/error.html");
+					echo "ERROR";
+					exit;
+				}
+			}
+*/
+/*
 			if($_SESSION[ 'sankaFin' ] == 1){
 				//既に参加登録をしている為
 				header("Location:/p_form/");
 				exit();
 			}
+*/
 			$set = array();
 			if($_REQUEST["sid"]){
 				//編集のときは既にあるものを利用
@@ -117,10 +165,15 @@ class pReg{
 				//参加者申込コード取得
 				$codes = $this->db->getSankaCode();
 			}
-			
+
 			$set[ 'code'            ] = $codes[ 'code' ];
 			$set[ 'num'             ] = $codes[ 'num'  ];
-			$set[ 'sanka_pay_status' ] = $data[ 'sanka_pay_status' ];
+			if($_REQUEST[ 'stripeToken' ]){
+				$set[ 'sanka_pay_status' ] = 1;
+			}else{
+				$set[ 'sanka_pay_status' ] = (strlen($data[ 'sanka_pay_status' ]) > 0 )?$data[ 'sanka_pay_status' ]:0;
+			}
+
 			$set[ 'password'        ] = $_REQUEST[ 'password'        ];
 			$set[ 'name1'           ] = $_REQUEST[ 'name1'           ];
 			$set[ 'name2'           ] = $_REQUEST[ 'name2'           ];
@@ -142,9 +195,9 @@ class pReg{
 			$set[ 'syozokuSankaformselectOther' ] = $_REQUEST[ 'syozokuSankaformselectOther'];
 
 			$set[ 'password'        ] = $_REQUEST[ 'password'        ];
-			$set[ 'join_type'       ] = $_REQUEST[ 'join_type'       ];
-			$set[ 'koushinkai'      ] = $_REQUEST[ 'konshinkai'      ];
-			$set[ 'total'           ] = $_REQUEST[ 'all'             ];
+			$set[ 'join_type'       ] = (int)$_REQUEST[ 'join_type'       ];
+			$set[ 'koushinkai'      ] = (int)$_REQUEST[ 'konshinkai'      ];
+			$set[ 'total'           ] = (int)$_REQUEST[ 'all'             ];
 			$set[ 'bikou'           ] = $_REQUEST[ 'bikou'           ];
 			$set[ 'regist_ts'       ] = date("Y-m-d H:i:s");
 			$set[ 'sanka_money'     ] = $this->join_money[$_REQUEST[ 'join_type' ]];
@@ -162,9 +215,9 @@ class pReg{
 				//懇親会参加しない
 				$set[ 'konshinkai_monay'] = 0;
 			}
+			
 			$table = "kagaku_sanka";
 			$flg = $this->db->setUserData($table,$set);
-
 			$sid = $this->db->lastid;
 
 			if($flg && $_REQUEST[ 'sid' ]){
@@ -174,6 +227,11 @@ class pReg{
 				$edit[ 'where' ][ 'id'     ] = $_REQUEST[ 'sid' ];
 				$this->db->editUserData($table,$edit);
 			}
+			
+
+
+
+
 			$_SESSION[ 'sankaFin' ] = 1;
 			//メール配信
 			//今登録したidの取得

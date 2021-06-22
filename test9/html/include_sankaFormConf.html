@@ -227,8 +227,18 @@
 {/if}
 <hr size=1 />
 <div class="box-footer">
-	<button class="btn btn-primary" type="submit" name="return" id="return" value="on">{$html.data.sankaform.sform.23.name_text1}</button>
-	<button class="btn btn-primary" type="submit" name="regist" id="regist" value="on">{$html.data.sankaform.sform.23.name_text3}</button>
+	<button class="btn btn-primary" type="button" name="return" id="return" value="on">{$html.data.sankaform.sform.23.name_text1}</button>
+	<button class="btn btn-primary" type="button"  id="regist" value="on">{$html.data.sankaform.sform.23.name_text3}</button>
+	<input type="hidden" name="regist" value="" />
+	<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="pk_test_51J4hgvLofq6whqU57mi0CsUPhP08YEJWzlpjOzQPK2cmR5ykc58xChm7U0lta3DGdPguDS0KmOpyLUM8LnUOg5um00COvUQh95"
+        data-amount="{$all}"
+        data-name="この商品の料金は{$all}円です"
+        data-locale="auto"
+        data-allow-remember-me="false"
+        data-label="購入する"
+        data-currency="jpy">
+    </script>
 
 </div>
 {assign var="sid" value=$html.data.sanka.id}
