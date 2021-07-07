@@ -818,6 +818,33 @@ print $vals;
     		$stu = 0;
     		if($data[ 'studentPoster'    ]) $stu = 1;
 
+    		$sid    = (isset($data[ 'sid']))?$data[ 'sid']:"";
+    		$nums   = (isset($num[ 'num' ]))?$num[ 'num']:"";
+    		$code   = (isset($num[ 'code']))?$num[ 'code']:"";
+    		$happyo = (isset($data[ 'happyo']) && $data[ 'happyo'] )?$data[ 'happyo']:0;
+    		$syoutai = (isset($data[ 'syoutai']) && $data[ 'syoutai'] )?$data[ 'syoutai']:0;
+    		$korokiumu = (isset($data[ 'korokiumu']))?$data[ 'korokiumu']:0;
+    		$ippanKouenposter = (isset($data[ 'ippanKouenposter']))?$data[ 'ippanKouenposter']:0;
+    		$ippanKouenkouto  = (isset($data[ 'ippanKouenkouto']))?$data[ 'ippanKouenkouto']:0;
+    		$endainame = (isset($data[ 'endainame']))?$data[ 'endainame']:"";
+    		$syozoku_count = (isset($data[ 'syozoku_count']))?$data[ 'syozoku_count']:"";
+    		$tyosya_count = (isset($data[ 'tyosya_count']))?$data[ 'tyosya_count']:"";
+    		$tyosya = (isset($data[ 'tyosya']))?$data[ 'tyosya']:"";
+    		$pc = (isset($data[ 'pc']))?$data[ 'pc']:"";
+    		$otheros = (isset($data[ 'otheros']))?$data[ 'otheros']:"";
+    		$bikou = (isset($data[ 'bikou']))?$data[ 'bikou']:"";
+    		$otheros = (isset($data[ 'otheros']))?$data[ 'otheros']:"";
+    		$publication = (isset($data[ 'publication']))?$data[ 'publication']:"";
+    		$vote = (isset($data[ 'vote']) && $data[ 'vote' ])?$data[ 'vote']:0;
+    		$vote_text = (isset($data[ 'vote_text']))?$data[ 'vote_text']:"";
+    		$fileUpdate_ts = (isset($data[ 'fileUpdate_ts']))?$data[ 'fileUpdate_ts']:"";
+    		$fileUpdate_ext = (isset($data[ 'fileUpdate_ext']))?$data[ 'fileUpdate_ext']:"";
+    		$fileUpdate_flash_ts = (isset($data[ 'fileUpdate_flash_ts']))?$data[ 'fileUpdate_flash_ts']:"";
+    		$fileUpdate_flash_ext = (isset($data[ 'fileUpdate_flash_ext']))?$data[ 'fileUpdate_flash_ext']:"";
+    		$fileUpdate_poster_ts = (isset($data[ 'fileUpdate_poster_ts']))?$data[ 'fileUpdate_poster_ts']:"";
+    		$fileUpdate_poster_ext = (isset($data[ 'fileUpdate_poster_ext']))?$data[ 'fileUpdate_poster_ext']:"";
+				$teacher = (isset($data[ 'teacher']))?$data[ 'teacher']:"";
+
     		$sql = "
     				INSERT INTO
     					kagaku_endai
@@ -871,8 +898,8 @@ print $vals;
     						,:vote_text
     						,NOW()
     						,:fileUpdate_ts
-							,:fileUpdate_ext
-							,:fileUpdate_flash_ts
+								,:fileUpdate_ext
+								,:fileUpdate_flash_ts
     						,:fileUpdate_flash_ext
     						,:fileUpdate_poster_ts
     						,:fileUpdate_poster_ext
@@ -881,32 +908,7 @@ print $vals;
     				";
 
     		$r = $this->db->prepare($sql);
-    		$sid    = (isset($data[ 'sid']))?$data[ 'sid']:"";
-    		$nums   = (isset($num[ 'num' ]))?$num[ 'num']:"";
-    		$code   = (isset($num[ 'code']))?$num[ 'code']:"";
-    		$happyo = (isset($data[ 'happyo']))?$data[ 'happyo']:"";
-    		$syoutai = (isset($data[ 'syoutai']))?$data[ 'syoutai']:"";
-    		$korokiumu = (isset($data[ 'korokiumu']))?$data[ 'korokiumu']:"";
-    		$ippanKouenposter = (isset($data[ 'ippanKouenposter']))?$data[ 'ippanKouenposter']:"";
-    		$ippanKouenkouto  = (isset($data[ 'ippanKouenkouto']))?$data[ 'ippanKouenkouto']:"";
-    		$endainame = (isset($data[ 'endainame']))?$data[ 'endainame']:"";
-    		$syozoku_count = (isset($data[ 'syozoku_count']))?$data[ 'syozoku_count']:"";
-    		$tyosya_count = (isset($data[ 'tyosya_count']))?$data[ 'tyosya_count']:"";
-    		$tyosya = (isset($data[ 'tyosya']))?$data[ 'tyosya']:"";
-    		$pc = (isset($data[ 'pc']))?$data[ 'pc']:"";
-    		$otheros = (isset($data[ 'otheros']))?$data[ 'otheros']:"";
-    		$bikou = (isset($data[ 'bikou']))?$data[ 'bikou']:"";
-    		$otheros = (isset($data[ 'otheros']))?$data[ 'otheros']:"";
-    		$publication = (isset($data[ 'publication']))?$data[ 'publication']:"";
-    		$vote = (isset($data[ 'vote']))?$data[ 'vote']:"";
-    		$vote_text = (isset($data[ 'vote_text']))?$data[ 'vote_text']:"";
-    		$fileUpdate_ts = (isset($data[ 'fileUpdate_ts']))?$data[ 'fileUpdate_ts']:"";
-    		$fileUpdate_ext = (isset($data[ 'fileUpdate_ext']))?$data[ 'fileUpdate_ext']:"";
-    		$fileUpdate_flash_ts = (isset($data[ 'fileUpdate_flash_ts']))?$data[ 'fileUpdate_flash_ts']:"";
-    		$fileUpdate_flash_ext = (isset($data[ 'fileUpdate_flash_ext']))?$data[ 'fileUpdate_flash_ext']:"";
-    		$fileUpdate_poster_ts = (isset($data[ 'fileUpdate_poster_ts']))?$data[ 'fileUpdate_poster_ts']:"";
-    		$fileUpdate_poster_ext = (isset($data[ 'fileUpdate_poster_ext']))?$data[ 'fileUpdate_poster_ext']:"";
-			$teacher = (isset($data[ 'teacher']))?$data[ 'teacher']:"";
+
 
     		$r->bindValue(":sid",$sid,PDO::PARAM_STR);
     		$r->bindValue(":num",$nums,PDO::PARAM_STR);
@@ -916,7 +918,6 @@ print $vals;
     		$r->bindValue(":korokiumu",$korokiumu,PDO::PARAM_STR);
     		$r->bindValue(":ippanKouenposter",$ippanKouenposter,PDO::PARAM_STR);
     		$r->bindValue(":ippanKouenkouto",$ippanKouenkouto,PDO::PARAM_STR);
-
     		$r->bindValue(":stu",$stu,PDO::PARAM_STR);
     		$r->bindValue(":endainame",$endainame,PDO::PARAM_STR);
     		$r->bindValue(":syozoku_count",$syozoku_count,PDO::PARAM_STR);
@@ -938,6 +939,7 @@ print $vals;
 
     		$flg = $r->execute();
     		$id = $this->db->lastInsertId('id');
+
     		//演題データのinsertid
     		//endailg.phpで利用
     		$this->eid = $id;

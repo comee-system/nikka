@@ -175,7 +175,6 @@ class reg{
 
 
 				if(!$err){
-
 					//eidがあるときはステータスを0にして以下で新規登録を行う
 					if($third == "eid"){
 						$table = "kagaku_endai";
