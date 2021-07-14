@@ -107,6 +107,21 @@ class pReg{
 			
 			$chargeId = null;
 			if($_REQUEST[ 'regist' ] != "on"){
+
+				$set = array();
+				if($_REQUEST["sid"]){
+					//編集のときは既にあるものを利用
+					$codes[ 'code' ] = $data[ 'code' ];
+					$codes[ 'num'  ] = $data[ 'num'  ];
+				}else{
+					//参加者申込コード取得
+					$codes = $this->db->getSankaCode();
+				}
+
+
+				$description = "名前:".$_REQUEST[ 'name1'].$_REQUEST[ 'name2'];
+				$description .= "/参加登録ID:".$codes[ 'code' ];
+				$description .= "/電話番号:".$_REQUEST[ 'tel' ];
 				try {
 					// (1) オーソリ（与信枠の確保）
 					$token = $_POST['stripeToken'];
@@ -114,7 +129,7 @@ class pReg{
 						$charge = \Stripe\Charge::create(array(
 							'amount' => $_SESSION[ 'joinall' ] ,
 							'currency' => 'jpy',
-							'description' => 'test',
+							'description' => $description,
 							'source' => $token,
 							'capture' => false,
 						));
@@ -156,15 +171,7 @@ class pReg{
 				exit();
 			}
 */
-			$set = array();
-			if($_REQUEST["sid"]){
-				//編集のときは既にあるものを利用
-				$codes[ 'code' ] = $data[ 'code' ];
-				$codes[ 'num'  ] = $data[ 'num'  ];
-			}else{
-				//参加者申込コード取得
-				$codes = $this->db->getSankaCode();
-			}
+			
 
 			$set[ 'code'            ] = $codes[ 'code' ];
 			$set[ 'num'             ] = $codes[ 'num'  ];
@@ -228,8 +235,6 @@ class pReg{
 				$this->db->editUserData($table,$edit);
 			}
 			
-
-
 
 
 			$_SESSION[ 'sankaFin' ] = 1;

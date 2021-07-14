@@ -403,11 +403,9 @@ class method extends Auth{
 		foreach($data as $key=>$val){
 		    $k = ":".$key;
 		    if(strlen($val) < 1 ) $val = "";
-		    $r->bindValue($k,$val,PDO::PARAM_STR);
+		 //   $r->bindValue($k,$val,PDO::PARAM_STR);
 			$vals .= ",'".$val."'";
 		}
-print $sql;
-print $vals;
 
 		$flg = $r->execute();
 
@@ -447,7 +445,7 @@ print $vals;
 					sanka_syozoku_mst
 		";
 		if($status){
-			$sql .= "WHERE status = 1 ";
+			$sql .= " WHERE status = 1 ";
 		}
 		$list = [];
 		$r = $this->db->query($sql);
